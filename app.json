@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Try",
+    "slug": "Try",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "Try",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
