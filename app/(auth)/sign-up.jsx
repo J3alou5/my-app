@@ -53,7 +53,7 @@ const SignUp = () => {
           />
 
           <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+            Sign Up to Try
           </Text>
 
           <FormField
@@ -93,7 +93,7 @@ const SignUp = () => {
               href="/sign-in"
               className="text-lg font-psemibold text-secondary"
             >
-              Login
+              Log in
             </Link>
           </View>
         </View>
