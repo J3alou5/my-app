@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 
@@ -10,7 +10,6 @@ import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
-
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -19,11 +18,7 @@ const Home = () => {
     setRefreshing(false);
   };
 
-  // one flatlist
-  // with list header
-  // and horizontal flatlist
-
-  //  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
+  // Handle loading and error states if needed
 
   return (
     <SafeAreaView className="bg-primary">
@@ -86,3 +81,4 @@ const Home = () => {
 };
 
 export default Home;
+
