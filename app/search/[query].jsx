@@ -1,15 +1,18 @@
-import { useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { View, Text, FlatList } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-import useAppwrite from "../../lib/useAppwrite";
-import { searchPosts } from "../../lib/appwrite";
-import { EmptyState, SearchInput, VideoCard } from "../../components";
+import { View, Text, FlatList} from 'react-native'
+import React, { useEffect } from 'react'
+import { useLocalSearchParams } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import  { searchPosts } from '@/lib/appwrite';
+import  useAppwrite   from '@/lib/useAppwrite'
+import  EmptyState  from "@/components/EmptyState"
+import  SearchInput  from '@/components/SearchInput'
+import  VideoCard  from '@/components/VideoCard'
 
 const Search = () => {
   const { query } = useLocalSearchParams();
-  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
+  const { data: posts, refetch} = useAppwrite(() => searchPosts(query));
+
+  console.log(query,posts)
 
   useEffect(() => {
     refetch();
@@ -17,20 +20,14 @@ const Search = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <FlatList
+      <FlatList 
         data={posts}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <VideoCard
-            title={item.title}
-            thumbnail={item.thumbnail}
-            video={item.video}
-            creator={item.creator.username}
-            avatar={item.creator.avatar}
-          />
+        keyExtractor={(item) => item.$id }
+        renderItem={({item}) => (
+          <VideoCard video={item}/>
         )}
         ListHeaderComponent={() => (
-          <>
+          
             <View className="flex my-6 px-4">
               <Text className="font-pmedium text-gray-100 text-sm">
                 Search Results
@@ -43,17 +40,18 @@ const Search = () => {
                 <SearchInput initialQuery={query} refetch={refetch} />
               </View>
             </View>
-          </>
+          
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title="No Videos Found"
-            subtitle="No videos found for this search query"
+          title="No Videos Found"
+          subtitle="No videos found for this search query"
           />
         )}
       />
     </SafeAreaView>
-  );
-};
+  )
+}
 
+  
 export default Search;
