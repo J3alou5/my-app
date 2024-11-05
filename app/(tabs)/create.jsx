@@ -44,33 +44,29 @@ const Create = () => {
   } 
 
   const Submit = async () => {
-    if (!form.prompt || !form.title || !form.thumbnail || !form.video) {
-       return Alert.alert('Please fill in all the fields');
-    }
- 
-    setUploading(true);
+    if(!form.prompt || !form.title || !form.thumbnail || !form.video)
+      return Alert.alert('Please fill in all the fields')
+  
+    setUploading(true)
     try {
-       const response = await createVideo({
-          ...form,
-          userId: user?.$id || "defaultUserId" // Fallback in case user.$id is undefined
-       });
- 
-       Alert.alert('Success', 'Post uploaded successfully');
-       router.push('/home');
+      await createVideo({
+        ...form, userId: user.$id
+      })
+
+        Alert.alert('Sucess', 'Post uploaded successfully') 
+        router.push('/home')
     } catch (error) {
-       console.error("Submission Error:", error);
-       Alert.alert('Error', error.message || "An error occurred during submission.");
-    } finally {
-       setForm({
-          title: '',
-          video: null,
-          thumbnail: null,
-          prompt: ''
-       });
-       setUploading(false);
+        Alert.alert('Error', error.message)
+    } finally{
+        setForm({
+        title: '',
+        video: null,
+        thumbnail: null,
+        prompt: ''
+      })
+      setUploading(false);
     }
- };
- 
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
