@@ -16,10 +16,10 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.jsm.aora",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "package": "com.jsm.try"
       }
     },
     "web": {

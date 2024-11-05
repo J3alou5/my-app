@@ -1,14 +1,20 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { icons } from '@/constants'
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { icons } from '@/constants';
 import { ResizeMode, Video } from 'expo-av';
 
-const VideoCard = ({ video: { title, thumbnail, video: videoUri, users } }) => {
+const VideoCard = ({ video: { title, thumbnail, video, users: { username, avatar } } }) => {
     const [play, setPlay] = useState(false);
-    
-    // Destructure with fallback values
-    const username = users?.username || 'Guest User';
-    const avatar = users?.avatar || icons.defaultAvatar; // Use a default avatar if users is undefined
+    const [loading, setLoading] = useState(false);
+    const [videoRef, setVideoRef] = useState(null);
+
+    useEffect(() => {
+        return () => {
+            if (videoRef) {
+                videoRef.stopAsync(); // Stop video on unmount
+            }
+        };
+    }, [videoRef]);
 
     return (
         <View className="flex-col items-center px-4 mb-14">
@@ -32,24 +38,35 @@ const VideoCard = ({ video: { title, thumbnail, video: videoUri, users } }) => {
             </View>
 
             {play ? (
-                <Video 
-                    source={{ uri: videoUri }}
-                    className="w-full h-60 rounded-xl mt-3"
-                    resizeMode={ResizeMode.CONTAIN}
-                    useNativeControls
-                    shouldPlay
-                    onPlaybackStatusUpdate={(status) => {
-                        if (status.didJustFinish) {
-                            setPlay(false);
-                        } else if (status.error) {
-                            console.error("Error playing video:", status.error);
-                        }
-                    }}
-                />
+                <>
+                    {loading && <ActivityIndicator size="large" color="#fff" />}
+                    <Video
+                        ref={(ref) => setVideoRef(ref)}
+                        source={{ uri: video }}
+                        className="w-full h-60 rounded-xl mt-3"
+                        resizeMode={ResizeMode.CONTAIN}
+                        useNativeControls
+                        shouldPlay
+                        onPlaybackStatusUpdate={(status) => {
+                            if (status.isLoaded) {
+                                setLoading(false);
+                            }
+                            if (status.didJustFinish) {
+                                setPlay(false);
+                            } else if (status.error) {
+                                console.error("Error playing video:", status.error);
+                                setPlay(false);
+                            }
+                        }}
+                    />
+                </>
             ) : (
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => setPlay(true)}
+                    onPress={() => {
+                        setLoading(true);
+                        setPlay(true);
+                    }}
                     className="w-full h-60 rounded-xl mt-3 relative justify-center items-center"
                 >
                     <Image 
@@ -65,7 +82,7 @@ const VideoCard = ({ video: { title, thumbnail, video: videoUri, users } }) => {
                 </TouchableOpacity>
             )}
         </View>
-    )
-}
+    );
+};
 
 export default VideoCard;
